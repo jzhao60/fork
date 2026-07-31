@@ -124,6 +124,56 @@
         padding: 1rem;
     }
 
+    .countdown-box {
+        text-align: center;
+    }
+
+    .countdown-label {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+        letter-spacing: 0.03em;
+    }
+
+    .countdown-timer {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: 0.4rem;
+    }
+
+    .countdown-segment {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 3.2rem;
+    }
+
+    .countdown-segment .num {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        font-size: 2.6rem;
+        color: #B68DE0;
+        line-height: 1;
+    }
+
+    .countdown-segment .unit {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 0.75rem;
+        color: #4a3b53;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 0.3rem;
+    }
+
+    .countdown-colon {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        font-size: 2.6rem;
+        color: #B68DE0;
+        line-height: 1;
+        transform: translateY(-0.35rem);
+    }
+
     .letter-box p {
         font-family: Arial, Helvetica, sans-serif;
         color: #2f2438;
@@ -191,6 +241,28 @@
             </header>
 
             <div class="frame">
+                <div class="box letter-box countdown-box">
+                    <p class="countdown-label">countdown till i arrive to caliiiiiiifornia</p>
+                    <div class="countdown-timer">
+                        <div class="countdown-segment">
+                            <span class="num" id="cd-days">00</span>
+                            <span class="unit">days</span>
+                        </div>
+                        <span class="countdown-colon">:</span>
+                        <div class="countdown-segment">
+                            <span class="num" id="cd-hours">00</span>
+                            <span class="unit">hours</span>
+                        </div>
+                        <span class="countdown-colon">:</span>
+                        <div class="countdown-segment">
+                            <span class="num" id="cd-mins">00</span>
+                            <span class="unit">mins</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="frame">
                 <div class="box letter-box">
                     <p>dear kiran
 whenever i compliment u, i always get this unsatisfied feeling in my chest, like words cant express the way i feel about u, but:
@@ -227,6 +299,29 @@ plz dont like anyone at fsri plz hate everyone</p>
     </footer>
 
     <script>
+        // countdown to Sat, 19 Sep 2026 9:54 AM Pacific time
+        // note: California is on Pacific Daylight Time (UTC-7) in September,
+        // not standard PST (UTC-8) - using the real local offset for that date
+        const targetDate = new Date("2026-09-19T09:54:00-07:00");
+
+        function updateCountdown() {
+            const now = new Date();
+            let diff = targetDate - now;
+
+            if (diff < 0) diff = 0;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const mins = Math.floor((diff / (1000 * 60)) % 60);
+
+            document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000 * 30);
+
         const correctPassword = "iamachud";
         const input = document.getElementById('password-input');
         const errorMsg = document.getElementById('password-error');
