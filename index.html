@@ -94,34 +94,36 @@
     }
 
     .content-row {
-        display: flex;
-        gap: 2rem;
-        align-items: flex-start;
+        display: grid;
+        column-gap: 2rem;
+        row-gap: 0;
+        grid-template-columns: 280px 1fr;
+        grid-template-areas:
+            "side counter"
+            "side letter";
+        align-items: start;
         justify-content: center;
     }
 
     .side-column {
-        flex: 0 0 280px;
-        max-width: 280px;
+        grid-area: side;
     }
 
-    .center-column {
-        flex: 1 1 700px;
-        max-width: 700px;
+    .counter-column {
+        grid-area: counter;
+    }
+
+    .letter-column {
+        grid-area: letter;
     }
 
     @media (max-width: 840px) {
         .content-row {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        .side-column {
-            flex: 1 1 auto;
-            max-width: 100%;
-        }
-        .center-column {
-            flex: 1 1 auto;
-            max-width: 100%;
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "counter"
+                "side"
+                "letter";
         }
     }
 
@@ -301,8 +303,7 @@
                     </div>
                 </div>
 
-                <div class="center-column">
-
+                <div class="counter-column">
                     <div class="frame">
                         <div class="box letter-box countdown-box">
                             <p class="countdown-label">countdown till i arrive to caliiiiiiifornia</p>
@@ -324,7 +325,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div class="letter-column">
                     <div class="frame">
                         <div class="box letter-box">
                             <p>dear kiran
@@ -334,7 +337,6 @@ jason
 plz dont like anyone at fsri plz hate everyone</p>
                         </div>
                     </div>
-
                 </div>
 
             </div>
