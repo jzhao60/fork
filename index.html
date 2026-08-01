@@ -241,6 +241,80 @@
         display: block;
     }
 
+    .wordle-box {
+        background: #ffffff;
+        border: 10px solid #B68DE0;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .wordle-box .side-label {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+        letter-spacing: 0.03em;
+    }
+
+    .wordle-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        gap: 6px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .wordle-grid:focus .wordle-tile.empty {
+        border-color: #B68DE0;
+    }
+
+    .wordle-tile {
+        width: 100%;
+        aspect-ratio: 1;
+        border: 2px solid #e4d6f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #2f2438;
+        background: #ffffff;
+        text-transform: uppercase;
+        transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    .wordle-tile.filled {
+        border-color: #B68DE0;
+    }
+
+    .wordle-tile.green {
+        background: #6aaa64;
+        border-color: #6aaa64;
+        color: #ffffff;
+    }
+
+    .wordle-tile.yellow {
+        background: #c9b458;
+        border-color: #c9b458;
+        color: #ffffff;
+    }
+
+    .wordle-tile.gray {
+        background: #939598;
+        border-color: #939598;
+        color: #ffffff;
+    }
+
+    .wordle-message {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1rem;
+        margin-top: 0.8rem;
+        min-height: 1.4rem;
+    }
+
     .text-box p {
         font-size: 1.15rem;
         color: #3d2f45;
@@ -299,6 +373,14 @@
                         <div class="box photo-box">
                             <p class="side-label">reminded me of u</p>
                             <img src="p/goodone.jpg" alt="hydrangea flowers">
+                        </div>
+                    </div>
+
+                    <div class="frame">
+                        <div class="box wordle-box">
+                            <p class="side-label">har har har</p>
+                            <div class="wordle-grid" id="wordle-grid" tabindex="0"></div>
+                            <p class="wordle-message" id="wordle-message"></p>
                         </div>
                     </div>
                 </div>
@@ -390,6 +472,112 @@ plz dont like anyone at fsri plz hate everyone</p>
 
         updateCountdown();
         setInterval(updateCountdown, 1000 * 30);
+
+        // ---------------- WORDLE ----------------
+        (function() {
+            const TARGET = "ILOVEU";
+            const ROWS = 6;
+            const COLS = 6;
+
+            let board = Array.from({ length: ROWS }, () => Array(COLS).fill(''));
+            let currentRow = 0;
+            let currentCol = 0;
+            let finished = false;
+
+            const grid = document.getElementById('wordle-grid');
+            const message = document.getElementById('wordle-message');
+
+            // build tiles
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'wordle-tile';
+                    tile.id = `wt-${r}-${c}`;
+                    grid.appendChild(tile);
+                }
+            }
+
+            function renderRow(r) {
+                for (let c = 0; c < COLS; c++) {
+                    const tile = document.getElementById(`wt-${r}-${c}`);
+                    const letter = board[r][c];
+                    tile.textContent = letter;
+                    tile.classList.toggle('filled', letter !== '');
+                }
+            }
+
+            function submitGuess() {
+                const guess = board[currentRow].join('');
+                const targetArr = TARGET.split('');
+                const result = Array(COLS).fill('gray');
+
+                for (let i = 0; i < COLS; i++) {
+                    if (guess[i] === TARGET[i]) {
+                        result[i] = 'green';
+                        targetArr[i] = null;
+                    }
+                }
+                for (let i = 0; i < COLS; i++) {
+                    if (result[i] === 'green') continue;
+                    const idx = targetArr.indexOf(guess[i]);
+                    if (idx !== -1) {
+                        result[i] = 'yellow';
+                        targetArr[idx] = null;
+                    }
+                }
+
+                for (let c = 0; c < COLS; c++) {
+                    const tile = document.getElementById(`wt-${currentRow}-${c}`);
+                    tile.classList.remove('filled');
+                    tile.classList.add(result[c]);
+                }
+
+                if (guess === TARGET) {
+                    finished = true;
+                    message.textContent = "frick u";
+                    return;
+                }
+
+                currentRow++;
+                currentCol = 0;
+
+                if (currentRow === ROWS) {
+                    finished = true;
+                    message.textContent = "ur prolly stupid but ILOVEU";
+                }
+            }
+
+            grid.addEventListener('keydown', function(e) {
+                if (finished) return;
+
+                const key = e.key.toUpperCase();
+
+                if (key === 'BACKSPACE') {
+                    e.preventDefault();
+                    if (currentCol > 0) {
+                        currentCol--;
+                        board[currentRow][currentCol] = '';
+                        renderRow(currentRow);
+                    }
+                } else if (key === 'ENTER') {
+                    e.preventDefault();
+                    if (currentCol === COLS) {
+                        submitGuess();
+                    } else {
+                        message.textContent = "not enough letters";
+                        setTimeout(() => { if (!finished) message.textContent = ''; }, 1200);
+                    }
+                } else if (/^[A-Z]$/.test(key) && currentCol < COLS) {
+                    board[currentRow][currentCol] = key;
+                    currentCol++;
+                    renderRow(currentRow);
+                }
+            });
+
+            grid.addEventListener('click', function() {
+                grid.focus();
+            });
+        })();
 
         const correctPassword = "iamachud";
         const input = document.getElementById('password-input');
