@@ -88,7 +88,7 @@
     .strip-wrapper {
         position: relative;
         z-index: 1;
-        max-width: 1040px;
+        max-width: 1320px;
         margin: 0 auto;
         padding: 2rem 2rem 6rem;
     }
@@ -97,10 +97,10 @@
         display: grid;
         column-gap: 2rem;
         row-gap: 0;
-        grid-template-columns: 280px 1fr;
+        grid-template-columns: 280px 1fr 340px;
         grid-template-areas:
-            "side counter"
-            "side letter";
+            "side counter present"
+            "side letter present";
         align-items: start;
         justify-content: center;
     }
@@ -117,12 +117,27 @@
         grid-area: letter;
     }
 
+    .present-column {
+        grid-area: present;
+    }
+
+    @media (max-width: 1080px) {
+        .content-row {
+            grid-template-columns: 260px 1fr;
+            grid-template-areas:
+                "side counter"
+                "side letter"
+                "present present";
+        }
+    }
+
     @media (max-width: 840px) {
         .content-row {
             grid-template-columns: 1fr;
             grid-template-areas:
                 "counter"
                 "side"
+                "present"
                 "letter";
         }
     }
@@ -136,8 +151,8 @@
     h1 {
         font-size: 2.5rem;
         font-weight: 400;
-        color: #f6effb;
-        text-shadow: 0 0 18px rgba(182, 141, 224, 0.65), 0 2px 6px rgba(74, 59, 83, 0.55);
+        color: #ffffff;
+        text-shadow: 2px 2px 0px rgba(74, 59, 83, 0.25);
         letter-spacing: 0.02em;
     }
 
@@ -258,9 +273,10 @@
 
     .wordle-grid {
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: repeat(6, 1fr);
-        gap: 6px;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        grid-template-rows: repeat(6, minmax(0, 1fr));
+        gap: 5px;
+        width: 100%;
         outline: none;
         cursor: pointer;
     }
@@ -271,6 +287,7 @@
 
     .wordle-tile {
         width: 100%;
+        min-width: 0;
         aspect-ratio: 1;
         border: 2px solid #e4d6f2;
         display: flex;
@@ -278,7 +295,7 @@
         justify-content: center;
         font-family: Arial, Helvetica, sans-serif;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         color: #2f2438;
         background: #ffffff;
         text-transform: uppercase;
@@ -313,6 +330,157 @@
         font-size: 1rem;
         margin-top: 0.8rem;
         min-height: 1.4rem;
+    }
+
+    /* ---------------- PRESENT BOX ---------------- */
+    .present-box {
+        position: relative;
+        border: 10px solid #B68DE0;
+        border-radius: 20px;
+        padding: 0;
+        aspect-ratio: 350 / 210;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .present-cover {
+        position: absolute;
+        inset: 0;
+        transition: transform 0.7s cubic-bezier(0.55, 0, 0.85, 0.35), opacity 0.6s ease 0.15s;
+    }
+
+    .present-cover.dropped {
+        transform: translateY(140%) rotate(12deg);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .present-body {
+        position: absolute;
+        inset: 0;
+        background: #C9A8EA;
+    }
+
+    .present-ribbon-h {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 38%;
+        height: 24%;
+        background: #E6C568;
+    }
+
+    .present-ribbon-v {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 42%;
+        width: 16%;
+        background: #E6C568;
+    }
+
+    .present-content {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+    }
+
+    .present-content.visible {
+        display: flex;
+        animation: fadeInUp 0.6s ease;
+    }
+
+    .present-message {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        font-size: 40px;
+        font-weight: 700;
+        color: #2f2438;
+        margin: 0;
+        text-align: center;
+    }
+
+    .music-box {
+        background: #ffffff;
+        border: 10px solid #B68DE0;
+        padding: 1.2rem;
+        text-align: center;
+    }
+
+    .song-label {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1.1rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .music-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 0.4rem;
+        text-align: left;
+    }
+
+    .music-card .album-art {
+        width: 100%;
+        height: auto;
+        display: block;
+        border: none;
+        margin-bottom: 1rem;
+    }
+
+    .music-card .track-title {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #2f2438;
+        margin-bottom: 0.2rem;
+    }
+
+    .music-card .track-artist {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.05rem;
+        color: #6a5a76;
+        margin-bottom: 1rem;
+    }
+
+    .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .play-btn {
+        background: #7B2FBE;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 6px;
+        background: #e4d6f2;
+        border-radius: 3px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #7B2FBE;
     }
 
     .text-box p {
@@ -412,22 +580,11 @@
         margin-bottom: 2rem;
     }
 
-    .gfday-caption {
-        text-align: center;
-        max-width: 520px;
-        margin: 2rem auto 0;
-        font-size: 1rem;
-        font-style: italic;
-        color: #f2e9fa;
-        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.55);
-        line-height: 1.6;
-    }
-
     .gfday-frame-wrap {
         position: relative;
         width: 100%;
-        max-width: 820px;
-        aspect-ratio: 3 / 3;
+        max-width: 1020px;
+        aspect-ratio: 3 / 2;
         margin: 0 auto;
     }
 
@@ -442,7 +599,7 @@
     .frame-photo img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         display: block;
     }
 
@@ -450,63 +607,63 @@
     .frame-2 {
         left: 2%;
         top: 2%;
-        width: 45%;
-        height: 29%;
+        width: 43%;
+        height: 47%;
         border-radius: 16px 5px 18px 4px / 4px 14px 5px 16px;
         transform: rotate(-1.5deg);
         z-index: 2;
     }
 
-    /* top-right rectangle - matches 1.png (484x524, near square), head of the strip, pulled closer to center */
+    /* top-right rectangle - matches 1.png (484x524, near square) */
     .frame-1 {
-        left: 61%;
+        left: 72%;
         top: 2%;
-        width: 30%;
-        height: 24%;
+        width: 24%;
+        height: 38%;
         border-radius: 4px 18px 5px 14px / 12px 4px 16px 5px;
         transform: rotate(2deg);
         z-index: 3;
     }
 
-    /* top of stacked pair, bottom-left, nudged left so the heart covers it a touch more */
+    /* middle-left rectangle - matches 3.png (533x603, portrait) */
     .frame-3 {
-        left: -2%;
-        top: 36%;
-        width: 31%;
-        height: 29%;
+        left: 3%;
+        top: 51%;
+        width: 24%;
+        height: 40%;
         border-radius: 5px 16px 4px 18px / 14px 5px 16px 4px;
         transform: rotate(2.5deg);
         z-index: 2;
     }
 
-    /* bottom of stacked pair, sits down and to the right of frame-3, more spaced out */
+    /* stacked down-right of frame-3 - matches 5.png (365x428, portrait) */
     .frame-5 {
-        left: 14%;
-        top: 69%;
-        width: 31%;
-        height: 29%;
+        left: 18%;
+        top: 68%;
+        width: 24%;
+        height: 30%;
         border-radius: 18px 6px 20px 6px / 6px 16px 6px 18px;
-        transform: rotate(-2deg);
+        transform: rotate(-3deg);
         z-index: 3;
     }
 
-    /* long diagonal photo strip - matches 7.jpg (748x2059, very tall/narrow), shifted further right and down */
+    /* tilted, bottom-right - matches 7.jpg (748x2059, very tall/narrow) */
     .frame-7 {
-        left: 62%;
-        top: 27%;
-        width: 26%;
-        height: 71%;
+        left: 66%;
+        top: 34%;
+        width: 15%;
+        height: 64%;
         border-radius: 8px 20px 8px 20px / 20px 8px 20px 8px;
         transform: rotate(18deg);
         z-index: 2;
     }
 
-    /* heart, nestled center, overlapping neighbors - 8.jpg, wider horizontally */
+    /* heart, nestled center, overlapping neighbors - 8.jpg */
     .frame-heart {
-        left: 19%;
-        top: 16%;
-        width: 51%;
-        height: 54%;
+        left: 27%;
+        top: 15%;
+        width: 42%;
+        height: 58%;
         border: none;
         background: transparent;
         box-shadow: none;
@@ -529,50 +686,50 @@
 
     @media (max-width: 560px) {
         .gfday-frame-wrap {
-            aspect-ratio: 3 / 6;
+            aspect-ratio: 3 / 4.4;
         }
 
         .frame-2 {
             left: 2%;
             top: 1%;
-            width: 63%;
-            height: 18%;
+            width: 62%;
+            height: 24%;
         }
 
         .frame-1 {
-            left: 61%;
+            left: 67%;
             top: 0%;
-            width: 32%;
-            height: 15%;
-        }
-
-        .frame-heart {
-            left: 33%;
-            top: 20%;
-            width: 53%;
-            height: 20%;
-        }
-
-        .frame-7 {
-            left: 68%;
-            top: 46%;
-            width: 27%;
-            height: 44%;
-            transform: rotate(14deg);
+            width: 31%;
+            height: 22%;
         }
 
         .frame-3 {
-            left: -2%;
-            top: 21%;
-            width: 44%;
-            height: 21%;
+            left: 4%;
+            top: 27%;
+            width: 40%;
+            height: 24%;
+        }
+
+        .frame-heart {
+            left: 46%;
+            top: 27%;
+            width: 34%;
+            height: 30%;
         }
 
         .frame-5 {
-            left: 14%;
-            top: 46%;
-            width: 44%;
-            height: 21%;
+            left: 2%;
+            top: 53%;
+            width: 40%;
+            height: 24%;
+        }
+
+        .frame-7 {
+            left: 60%;
+            top: 55%;
+            width: 20%;
+            height: 42%;
+            transform: rotate(14deg);
         }
     }
 
@@ -629,7 +786,7 @@
         <!-- ============ GF DAY PAGE ============ -->
         <div class="page" id="page-gfday">
             <div class="gfday-inner">
-                <p class="gfday-title">happppppppppppppppppppppppy gf day</p>
+                <p class="gfday-title">gf day</p>
 
                 <div class="gfday-frame-wrap">
                     <div class="frame-photo frame-1">
@@ -655,8 +812,6 @@
                         </svg>
                     </div>
                 </div>
-
-                <p class="gfday-caption">i actually took the background photo when i was scouting the park with xuan for the promposal har har har har</p>
             </div>
         </div>
 
@@ -724,6 +879,40 @@ plz dont like anyone at fsri plz hate everyone</p>
                     </div>
                 </div>
 
+                <div class="present-column">
+                    <div class="frame">
+                        <div class="box present-box" id="present-box">
+                            <div class="present-cover" id="present-cover">
+                                <div class="present-body"></div>
+                                <div class="present-ribbon-h"></div>
+                                <div class="present-ribbon-v"></div>
+                            </div>
+
+                            <div class="present-content" id="present-content">
+                                <p class="present-message">ur fat</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="frame">
+                        <div class="box music-box">
+                            <p class="song-label">my current song</p>
+                            <div class="music-card">
+                                <img class="album-art" src="p/album-cover.jpg" alt="John Wayne - Cigarettes After Sex">
+                                <p class="track-title">John Wayne</p>
+                                <p class="track-artist">Cigarettes After Sex</p>
+                                <audio id="song-audio" src="p/song.mp3" preload="none"></audio>
+                                <div class="player-controls">
+                                    <button class="play-btn" id="play-btn">&#9654;</button>
+                                    <div class="progress-bar" id="progress-bar">
+                                        <div class="progress-fill" id="progress-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Additional sections for photos / text can be added below.
@@ -784,9 +973,9 @@ plz dont like anyone at fsri plz hate everyone</p>
 
         // ---------------- WORDLE ----------------
         (function() {
-            const TARGET = "ILOVEU";
+            const TARGET = "IMISSYOU";
             const ROWS = 6;
-            const COLS = 6;
+            const COLS = 8;
 
             let board = Array.from({ length: ROWS }, () => Array(COLS).fill(''));
             let currentRow = 0;
@@ -852,7 +1041,7 @@ plz dont like anyone at fsri plz hate everyone</p>
 
                 if (currentRow === ROWS) {
                     finished = true;
-                    message.textContent = "u may be stupid but ILOVEU";
+                    message.textContent = TARGET;
                 }
             }
 
@@ -885,6 +1074,59 @@ plz dont like anyone at fsri plz hate everyone</p>
 
             grid.addEventListener('click', function() {
                 grid.focus();
+            });
+        })();
+
+        // ---------------- PRESENT BOX ----------------
+        (function() {
+            const box = document.getElementById('present-box');
+            const cover = document.getElementById('present-cover');
+            const content = document.getElementById('present-content');
+            let opened = false;
+
+            box.addEventListener('click', function() {
+                if (opened) return;
+                opened = true;
+                cover.classList.add('dropped');
+                setTimeout(() => {
+                    content.classList.add('visible');
+                }, 350);
+            });
+        })();
+
+        // ---------------- SONG PLAYER ----------------
+        (function() {
+            const audio = document.getElementById('song-audio');
+            const playBtn = document.getElementById('play-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+
+            playBtn.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play();
+                    playBtn.innerHTML = '&#10074;&#10074;';
+                } else {
+                    audio.pause();
+                    playBtn.innerHTML = '&#9654;';
+                }
+            });
+
+            audio.addEventListener('timeupdate', function() {
+                if (audio.duration) {
+                    progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+                }
+            });
+
+            audio.addEventListener('ended', function() {
+                playBtn.innerHTML = '&#9654;';
+                progressFill.style.width = '0%';
+            });
+
+            progressBar.addEventListener('click', function(e) {
+                if (!audio.duration) return;
+                const rect = progressBar.getBoundingClientRect();
+                const pct = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = pct * audio.duration;
             });
         })();
 
