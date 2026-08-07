@@ -161,6 +161,10 @@
         animation: fadeInUp 0.8s ease;
     }
 
+    .counter-column .frame {
+        margin-bottom: 0.6rem;
+    }
+
     .box {
         background: rgba(255, 255, 255, 0.35);
         backdrop-filter: blur(10px);
@@ -343,6 +347,11 @@
         cursor: pointer;
     }
 
+    .present-box.opened {
+        aspect-ratio: auto;
+        min-height: 210px;
+    }
+
     .present-cover {
         position: absolute;
         inset: 0;
@@ -380,12 +389,13 @@
     }
 
     .present-content {
-        position: absolute;
-        inset: 0;
+        position: static;
         display: none;
         align-items: center;
         justify-content: center;
         background: #ffffff;
+        padding: 1.5rem;
+        min-height: 100%;
     }
 
     .present-content.visible {
@@ -395,7 +405,8 @@
 
     .present-message {
         font-family: 'Genshin Drip', cursive, system-ui;
-        font-size: 40px;
+        font-size: 32px;
+        line-height: 1.3;
         font-weight: 700;
         color: #2f2438;
         margin: 0;
@@ -483,9 +494,149 @@
         background: #7B2FBE;
     }
 
+    .gif-box {
+        background: #ffffff;
+        border: 10px solid #B68DE0;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .gif-box .side-label {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1.1rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.03em;
+    }
+
+    .gif-box img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+        margin-bottom: 0.6rem;
+    }
+
+    .gif-box .gif-caption {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1.05rem;
+        letter-spacing: 0.03em;
+        margin: 0 0 0.3rem;
+    }
+
+    .gif-box .gif-caption:last-child {
+        margin-bottom: 0;
+    }
+
+    .hearts-btn {
+        display: block;
+        width: 100%;
+        margin: 0;
+        font-family: 'Genshin Drip', cursive, system-ui;
+        background: #B68DE0;
+        border: none;
+        color: #ffffff;
+        padding: 1rem 1.6rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.15rem;
+        letter-spacing: 0.03em;
+        transition: transform 0.15s ease;
+    }
+
+    .hearts-btn:active {
+        transform: scale(0.97);
+    }
+
+    .hearts-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 300;
+        overflow: hidden;
+    }
+
+    .heart-piece {
+        position: absolute;
+        top: -10vh;
+        animation-name: confetti-fall;
+        animation-timing-function: ease-in;
+        animation-fill-mode: forwards;
+    }
+
     .text-box p {
         font-size: 1.15rem;
         color: #3d2f45;
+    }
+
+    .checklist-box {
+        background: #ffffff;
+        border: 10px solid #B68DE0;
+        padding: 1.5rem;
+    }
+
+    .checklist-box .side-label {
+        font-family: 'Genshin Drip', cursive, system-ui;
+        color: #2f2438;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        letter-spacing: 0.03em;
+        text-align: center;
+    }
+
+    .checklist-list {
+        list-style: none;
+        margin: 0 0 1rem;
+        padding: 0;
+    }
+
+    .checklist-item {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee0f7;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1rem;
+        color: #2f2438;
+    }
+
+    .checklist-item:last-child {
+        border-bottom: none;
+    }
+
+    .checklist-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #B68DE0;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    .checklist-item span.item-text {
+        flex: 1;
+        word-break: break-word;
+    }
+
+    .checklist-item.done span.item-text {
+        text-decoration: line-through;
+        color: #a396ab;
+    }
+
+    .checklist-item .item-delete {
+        background: none;
+        border: none;
+        color: #c7b5d6;
+        font-size: 1rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        line-height: 1;
+        padding: 0.2rem;
+    }
+
+    .checklist-item .item-delete:hover {
+        color: #B68DE0;
     }
 
     @keyframes fadeInUp {
@@ -514,10 +665,16 @@
         justify-content: center;
         gap: 1rem;
         padding: 1.4rem 1rem;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('k/6.jpg');
+        background-color: rgba(0, 0, 0, 0.55);
+        background-image: none;
         background-size: cover;
         background-position: top center;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(6px);
+        transition: background-image 0.3s ease;
+    }
+
+    #site.gfday-active .top-nav {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('k/6.jpg');
     }
 
     .nav-btn {
@@ -841,6 +998,15 @@
                             <p class="wordle-message" id="wordle-message"></p>
                         </div>
                     </div>
+
+                    <div class="frame">
+                        <div class="box gif-box">
+                            <p class="side-label">gif(t)</p>
+                            <img src="p/goodgif.gif" alt="">
+                            <p class="gif-caption">gah ah ah ah ah ah</p>
+                            <p class="gif-caption">i made this</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="counter-column">
@@ -877,6 +1043,13 @@ jason
 plz dont like anyone at fsri plz hate everyone</p>
                         </div>
                     </div>
+
+                    <div class="frame">
+                        <div class="box checklist-box">
+                            <p class="side-label">stuff to do cali together 🥳</p>
+                            <ul class="checklist-list" id="checklist-list"></ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="present-column">
@@ -889,7 +1062,7 @@ plz dont like anyone at fsri plz hate everyone</p>
                             </div>
 
                             <div class="present-content" id="present-content">
-                                <p class="present-message">ur fat</p>
+                                <p class="present-message">ur the prettiest girl ive ever met</p>
                             </div>
                         </div>
                     </div>
@@ -911,6 +1084,8 @@ plz dont like anyone at fsri plz hate everyone</p>
                             </div>
                         </div>
                     </div>
+
+                    <button class="hearts-btn" id="hearts-btn">click me</button>
                 </div>
 
             </div>
@@ -1089,6 +1264,7 @@ plz dont like anyone at fsri plz hate everyone</p>
                 opened = true;
                 cover.classList.add('dropped');
                 setTimeout(() => {
+                    box.classList.add('opened');
                     content.classList.add('visible');
                 }, 350);
             });
@@ -1148,6 +1324,7 @@ plz dont like anyone at fsri plz hate everyone</p>
             pageHome.classList.toggle('active', !toGfday);
             navGfday.classList.toggle('active', toGfday);
             navHome.classList.toggle('active', !toGfday);
+            site.classList.toggle('gfday-active', toGfday);
             if (toGfday) {
                 launchConfetti();
             }
@@ -1178,6 +1355,96 @@ plz dont like anyone at fsri plz hate everyone</p>
             setTimeout(() => layer.remove(), 5500);
         }
 
+        // ---------------- HEARTS BUTTON ----------------
+        function launchHearts() {
+            const hearts = ['💜', '💗', '❤️'];
+            const layer = document.createElement('div');
+            layer.className = 'hearts-layer';
+            document.body.appendChild(layer);
+
+            const count = 45;
+            for (let i = 0; i < count; i++) {
+                const piece = document.createElement('span');
+                piece.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                piece.className = 'heart-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.fontSize = (1.6 + Math.random() * 1.8) + 'rem';
+                piece.style.animationDuration = (2.4 + Math.random() * 2) + 's';
+                piece.style.animationDelay = (Math.random() * 0.7) + 's';
+                layer.appendChild(piece);
+            }
+
+            setTimeout(() => layer.remove(), 5500);
+        }
+
+        document.getElementById('hearts-btn').addEventListener('click', launchHearts);
+
+        // ---------------- CHECKLIST ----------------
+        (function() {
+            const STORAGE_KEY = 'forkiran-checklist';
+            const defaultItems = [
+                { text: 'foodin it up', done: false },
+                { text: 'beachin it up', done: false },
+                { text: 'star gazin', done: false },
+                { text: 'explore la', done: false }
+            ];
+
+            const list = document.getElementById('checklist-list');
+
+            function loadItems() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) return JSON.parse(raw);
+                } catch (e) {}
+                return defaultItems.slice();
+            }
+
+            function saveItems(items) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+                } catch (e) {}
+            }
+
+            let items = loadItems();
+
+            function render() {
+                list.innerHTML = '';
+                items.forEach((item, i) => {
+                    const li = document.createElement('li');
+                    li.className = 'checklist-item' + (item.done ? ' done' : '');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = item.done;
+                    checkbox.addEventListener('change', function() {
+                        items[i].done = checkbox.checked;
+                        saveItems(items);
+                        render();
+                    });
+
+                    const span = document.createElement('span');
+                    span.className = 'item-text';
+                    span.textContent = item.text;
+
+                    const del = document.createElement('button');
+                    del.className = 'item-delete';
+                    del.innerHTML = '&times;';
+                    del.addEventListener('click', function() {
+                        items.splice(i, 1);
+                        saveItems(items);
+                        render();
+                    });
+
+                    li.appendChild(checkbox);
+                    li.appendChild(span);
+                    li.appendChild(del);
+                    list.appendChild(li);
+                });
+            }
+
+            render();
+        })();
+
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
@@ -1189,7 +1456,7 @@ plz dont like anyone at fsri plz hate everyone</p>
                 errorMsg.textContent = '';
                 lockScreen.classList.add('hidden');
                 site.classList.add('revealed');
-                showPage('gfday');
+                showPage('home');
                 setTimeout(() => {
                     lockScreen.style.display = 'none';
                 }, 1400);
